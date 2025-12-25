@@ -2,57 +2,53 @@
 <html lang="zh-CN">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>祝图图宝贝圣诞快乐 - Merry Christmas</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>祝图图宝贝圣诞快乐</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Cinzel+Decorative:wght@700&family=Great+Vibes&display=swap" rel="stylesheet">
 
     <style>
-        /* --- 全局与背景 --- */
+        /* --- 全局设置 --- */
         body {
             margin: 0;
             overflow: hidden;
-            height: 100vh;
+            height: 100vh; /* 使用 viewport height */
+            height: 100dvh; /* 针对移动端动态高度优化 */
             display: flex;
             justify-content: center;
             align-items: center;
             font-family: 'Microsoft YaHei', sans-serif;
             background-color: #000;
-            /* 背景光影 */
             background-image:
                 radial-gradient(circle at 50% 85%, rgba(120, 30, 0, 0.45) 0%, rgba(0, 0, 0, 0) 60%),
                 radial-gradient(ellipse at center, #150a10 0%, #050508 60%, #000000 100%);
         }
 
-        /* 全屏暗角 */
         body::after {
             content: '';
-            position: absolute;
-            top: 0; left: 0; width: 100%; height: 100%;
+            position: absolute; top: 0; left: 0; width: 100%; height: 100%;
             background: radial-gradient(ellipse at center, transparent 30%, rgba(0,0,0,0.95) 100%);
-            pointer-events: none;
-            z-index: 2;
+            pointer-events: none; z-index: 2;
         }
 
-        canvas {
-            position: absolute;
-            top: 0; left: 0; z-index: 1; pointer-events: none;
-        }
+        canvas { position: absolute; top: 0; left: 0; z-index: 1; pointer-events: none; }
 
-        /* --- UI层 --- */
+        /* --- UI 容器 --- */
         .ui-container {
             position: absolute; top: 0; left: 0; width: 100%; height: 100%; z-index: 10;
-            display: flex; flex-direction: column; justify-content: space-between; align-items: center;
+            display: flex; flex-direction: column; 
+            justify-content: space-between; /* 上下分布 */
+            align-items: center;
             pointer-events: none;
+            padding-bottom: env(safe-area-inset-bottom); /* 适配全面屏底部 */
         }
 
-        /* --- 标题组 --- */
+        /* --- 标题区域 --- */
         .title-group {
             margin-top: 8vh;
             text-align: center;
             pointer-events: none;
-            /* 增加浮动动画，让文字看起来悬浮在空中 */
             animation: floatTitle 4s ease-in-out infinite;
         }
 
@@ -67,127 +63,88 @@
             color: #d4af37;
             text-shadow: 0 0 15px rgba(212, 175, 55, 0.6);
             letter-spacing: 4px;
-            margin: 0 0 15px 0;
-            text-transform: uppercase;
+            margin: 0 0 5px 0;
         }
 
-        /* =========================================
-           重点修改：Merry Christmas 艺术字样式 (方案一)
-           ========================================= */
         .art-subtitle {
-            /* 使用 Cinzel Decorative 字体，极具装饰感 */
             font-family: 'Cinzel Decorative', cursive; 
-            font-size: 4em; /* 字体调大 */
-            margin: 0;
-            line-height: 1.1;
-            letter-spacing: 2px; /* 增加字间距，更显大气 */
-            
-            /* 核心：金色流光渐变文字效果 */
+            font-size: 4em; 
+            margin: 0; line-height: 1.1; letter-spacing: 2px;
             background: linear-gradient(to bottom, #fffbcc 0%, #f1c40f 40%, #b38806 100%);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent; /* 让文字透明，显示背景的渐变 */
-            
-            /* 增加辉光滤镜 */
-            filter: drop-shadow(0 0 10px rgba(241, 196, 15, 0.4)) drop-shadow(0 0 20px rgba(0,0,0,0.8));
-            
-            transform: rotate(0deg); /* 这种字体不适合倾斜，摆正更庄重 */
-            padding: 10px;
+            -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+            filter: drop-shadow(0 0 10px rgba(241, 196, 15, 0.4));
+            padding: 5px;
         }
 
-        /* --- 底部许愿控制台 --- */
+        /* --- 底部控制台 --- */
         .wish-console {
             margin-bottom: 12vh;
             pointer-events: auto;
             background: rgba(255, 255, 255, 0.05);
-            backdrop-filter: blur(12px);
-            -webkit-backdrop-filter: blur(12px);
-            padding: 25px 40px;
+            backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px);
+            padding: 20px 30px;
             border-radius: 50px;
             border: 1px solid rgba(255, 215, 0, 0.25);
             box-shadow: 0 20px 50px rgba(0,0,0,0.7);
-            display: flex;
-            justify-content: center;
-            align-items: center;
+            display: flex; justify-content: center; align-items: center;
             min-width: 350px;
             transition: all 0.5s ease;
         }
         
-        #inputGroup {
-            display: flex; gap: 15px; align-items: center; transition: opacity 0.5s ease;
-        }
+        #inputGroup { display: flex; gap: 10px; align-items: center; transition: opacity 0.5s ease; }
 
         input[type="text"] {
-            background: rgba(0,0,0,0.4);
-            border: none;
+            background: rgba(0,0,0,0.4); border: none;
             border-bottom: 2px solid rgba(255, 215, 0, 0.6);
-            padding: 12px 15px;
-            color: #fff; /* 字体改亮白，对比度更高 */
-            font-size: 18px;
-            width: 220px;
-            outline: none;
-            text-align: center;
-            transition: border-color 0.3s;
-            border-radius: 5px 5px 0 0;
+            padding: 10px 10px; color: #fff; font-size: 16px; width: 200px;
+            outline: none; text-align: center; border-radius: 5px 5px 0 0;
             font-family: 'Microsoft YaHei', sans-serif;
         }
-        
-        input[type="text"]::placeholder { color: rgba(255, 255, 255, 0.5); }
+        input[type="text"]::placeholder { color: rgba(255, 255, 255, 0.5); font-size: 14px; }
         input[type="text"]:focus { border-bottom-color: #fff; background: rgba(0,0,0,0.6); }
 
         button#wishBtn {
-            padding: 12px 35px;
-            border: none;
-            border-radius: 30px;
-            background: linear-gradient(135deg, #d4af37, #fceba7, #d4af37); /* 增加金属质感渐变 */
-            background-size: 200% auto;
-            color: #3e2723;
-            font-weight: 800;
-            font-size: 18px;
-            cursor: pointer;
+            padding: 10px 25px; border: none; border-radius: 30px;
+            background: linear-gradient(135deg, #d4af37, #fceba7, #d4af37); background-size: 200% auto;
+            color: #3e2723; font-weight: 800; font-size: 16px; cursor: pointer;
             box-shadow: 0 0 20px rgba(212, 175, 55, 0.4);
-            transition: 0.3s;
-            animation: shine 3s infinite linear; /* 按钮流动光效 */
+            animation: shine 3s infinite linear;
         }
-        
-        @keyframes shine {
-            to { background-position: 200% center; }
-        }
-
-        button#wishBtn:hover {
-            transform: scale(1.05);
-            box-shadow: 0 0 30px rgba(212, 175, 55, 0.8);
-        }
+        @keyframes shine { to { background-position: 200% center; } }
 
         #successMessage {
-            display: none;
-            font-size: 1.8em;
-            font-weight: bold;
-            color: #fff;
-            text-shadow: 0 0 10px #d4af37, 0 0 20px #d4af37, 0 0 40px #e74c3c;
-            animation: glowPulse 0.8s infinite alternate;
+            display: none; font-size: 1.6em; font-weight: bold; color: #fff;
+            text-shadow: 0 0 10px #d4af37, 0 0 40px #e74c3c;
+            animation: glowPulse 0.8s infinite alternate; text-align: center;
         }
-
         @keyframes glowPulse {
             from { transform: scale(1); text-shadow: 0 0 20px #d4af37; }
             to { transform: scale(1.02); text-shadow: 0 0 40px #ffff00, 0 0 80px #e74c3c; }
         }
 
-        /* 移动端适配 */
+        /* --- 移动端专项适配 (核心修改) --- */
         @media (max-width: 768px) {
-            .title-group { margin-top: 10vh; }
-            .greeting-title { font-size: 1.4em; }
-            .art-subtitle { font-size: 2.5em; } /* 移动端字体调小 */
-            .wish-console { padding: 20px; width: 85%; margin-bottom: 15vh;}
-            #inputGroup { flex-direction: column; width: 100%; }
-            input[type="text"] { width: 100%; }
-            button#wishBtn { width: 100%; }
+            /* 标题上移 */
+            .title-group { margin-top: 5vh; }
+            .greeting-title { font-size: 1.4em; margin-bottom: 0; }
+            .art-subtitle { font-size: 2.8em; }
+            
+            /* 控制台下移，留出中间给树 */
+            .wish-console { 
+                margin-bottom: 8vh; 
+                padding: 15px 20px; 
+                width: 85%; 
+                min-width: auto;
+                flex-direction: column;
+            }
+            #inputGroup { flex-direction: column; width: 100%; gap: 15px; }
+            input[type="text"] { width: 100%; font-size: 16px; }
+            button#wishBtn { width: 100%; padding: 12px 0; }
         }
     </style>
 </head>
 <body>
-
     <canvas id="christmasCanvas"></canvas>
-
     <div class="ui-container">
         <div class="title-group">
             <h1 class="greeting-title">🎄 祝图图宝贝圣诞快乐 🎄</h1>
@@ -204,16 +161,11 @@
     </div>
 
     <script>
-        // ============================================
-        //  全局状态
-        // ============================================
         let isHyperMode = false;
         let currentRotationSpeed = 0.003;
         let snowSpeedMultiplier = 1;
 
-        // ============================================
-        //  PART 1: 交互
-        // ============================================
+        // UI 交互
         const wishBtn = document.getElementById('wishBtn');
         const wishInput = document.getElementById('wishInput');
         const inputGroup = document.getElementById('inputGroup');
@@ -221,16 +173,13 @@
         const consoleContainer = document.querySelector('.wish-console');
 
         wishBtn.addEventListener('click', triggerHyperMode);
-        wishInput.addEventListener('keypress', (e) => {
-            if(e.key === 'Enter') triggerHyperMode();
-        });
+        wishInput.addEventListener('keypress', (e) => { if(e.key === 'Enter') triggerHyperMode(); });
 
         function triggerHyperMode() {
             inputGroup.style.opacity = '0';
             setTimeout(() => {
                 inputGroup.style.display = 'none';
                 successMessage.style.display = 'block';
-                // 许愿后，控制台变亮，边框发光
                 consoleContainer.style.background = 'rgba(255, 255, 255, 0.1)';
                 consoleContainer.style.boxShadow = '0 0 60px rgba(212, 175, 55, 0.6)';
                 consoleContainer.style.border = '2px solid rgba(255, 215, 0, 0.8)';
@@ -242,9 +191,7 @@
             if (navigator.vibrate) navigator.vibrate([100, 50, 100, 50, 300]);
         }
 
-        // ============================================
-        //  PART 2: 粒子特效 (保持 V4.0 逻辑)
-        // ============================================
+        // 粒子系统
         const canvas = document.getElementById('christmasCanvas');
         const ctx = canvas.getContext('2d');
 
@@ -252,12 +199,12 @@
         let particles = [];
         let snowParticles = [];
         let rotation = 0;
+        let isMobile = false; // 标记是否为手机端
 
         const CONFIG = {
-            treeHeight: 360, // 树的高度
-            baseRadius: 150, 
+            // 基础配置
             branchLayers: 18, 
-            particleCount: 7500, // 增加粒子数
+            particleCount: 7500, 
             ornamentCount: 220, 
             lightCount: 800, 
             snowCount: 300, 
@@ -265,8 +212,7 @@
             colors: {
                 leaf: ['#0f5e2c', '#146B3A', '#197b30', '#2d8a4e'], 
                 ornament: ['#D43D2A', '#FFD700', '#3498DB', '#E74C3C'], 
-                light: '#FFF8DC', 
-                star: '#FFFF00' 
+                light: '#FFF8DC', star: '#FFFF00' 
             }
         };
 
@@ -306,7 +252,6 @@
                 const size = this.baseSize * projectedPoint.scale;
                 ctx.arc(projectedPoint.x, projectedPoint.y, size, 0, Math.PI * 2);
                 ctx.fill();
-
                 if (this.type === 'light' || this.type === 'star') {
                     ctx.shadowBlur = (isHyperMode ? 40 : 20) * projectedPoint.scale;
                     ctx.shadowColor = this.color;
@@ -339,8 +284,10 @@
         }
 
         function init() {
-            resize(); createTree(); createSnow();
             window.addEventListener('resize', resize);
+            resize(); // 先执行一次resize以确定设备类型
+            createTree(); 
+            createSnow();
             currentRotationSpeed = CONFIG.rotationSpeed;
             animate();
         }
@@ -348,12 +295,23 @@
         function resize() {
             width = canvas.width = window.innerWidth;
             height = canvas.height = window.innerHeight;
+            // 检测是否为移动端 (宽度小于768px)
+            isMobile = width < 768;
+            
+            // 如果树已经创建了，但在调整窗口大小，可能需要重建树以适应比例（可选）
+            if (particles.length > 0) createTree();
             if (snowParticles.length === 0) createSnow();
         }
 
         function createTree() {
             particles = [];
-            const H = CONFIG.treeHeight;
+            
+            // --- 核心适配逻辑 ---
+            // 电脑端高度大，手机端高度小一点防止遮挡
+            // 电脑端半径大，手机端半径小
+            const H = isMobile ? 320 : 380; 
+            const BaseR = isMobile ? 120 : 150;
+
             // 枝叶
             for (let layer = 0; layer < CONFIG.branchLayers; layer++) {
                 const progress = layer / CONFIG.branchLayers;
@@ -363,7 +321,7 @@
                 for (let i = 0; i < countPerLayer; i++) {
                     const y = yStart + Math.random() * (yEnd - yStart);
                     const hNorm = (y + H/2) / H; 
-                    const currentMaxR = CONFIG.baseRadius * Math.pow(hNorm, 0.8);
+                    const currentMaxR = BaseR * Math.pow(hNorm, 0.8);
                     const r = currentMaxR * Math.sqrt(Math.random()); 
                     const rJitter = r + (Math.random() - 0.5) * 10;
                     const angle = Math.random() * Math.PI * 2;
@@ -377,7 +335,7 @@
             for (let i = 0; i < CONFIG.ornamentCount; i++) {
                 const y = (Math.random() - 0.5) * H;
                 const hNorm = (y + H/2) / H;
-                const treeR = CONFIG.baseRadius * Math.pow(hNorm, 0.8);
+                const treeR = BaseR * Math.pow(hNorm, 0.8);
                 const r = treeR * (0.8 + Math.random() * 0.3);
                 const angle = Math.random() * Math.PI * 2;
                 const x = r * Math.cos(angle);
@@ -390,7 +348,7 @@
                 const p = i / CONFIG.lightCount; 
                 const y = H/2 - H * p; 
                 const hNorm = (y + H/2) / H; 
-                const r = CONFIG.baseRadius * Math.pow(hNorm, 0.8) + 5;
+                const r = BaseR * Math.pow(hNorm, 0.8) + 5;
                 const angle = p * Math.PI * 25; 
                 const x = r * Math.cos(angle);
                 const z = r * Math.sin(angle);
@@ -419,7 +377,13 @@
             const fov = 800; const viewDistance = 1000;
             particles.sort((a, b) => b.point.rotateY(rotation).z - a.point.rotateY(rotation).z);
             ctx.save();
-            ctx.translate(width / 2, height / 2 + 20); 
+            
+            // --- 关键位置调整 ---
+            // 如果是手机端，将树向上平移 (-60)，避开底部UI
+            // 如果是电脑端，稍微向下平移 (+20)，居中好看
+            const yOffset = isMobile ? -60 : 20;
+            ctx.translate(width / 2, height / 2 + yOffset); 
+
             particles.forEach(p => {
                 const rotatedPoint = p.point.rotateY(rotation);
                 if (rotatedPoint.z > -viewDistance + 50) {
